@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="ViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
+                        <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="City" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kMr-N4-iAC">
+                                <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="30"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Current Temp" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EDH-h7-Z4W">
+                                <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="50"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Current time" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gd0-FL-0tH">
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Forecast" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EPk-cf-GfT">
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="25"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Highest Lowest" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UQk-FP-iR1">
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Coming 1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="13" translatesAutoresizingMaskIntoConstraints="NO" id="7Q4-ZC-21M">
+                                <rect key="contentStretch" x="1" y="0.0" width="1" height="1"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Coming 2" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="13" translatesAutoresizingMaskIntoConstraints="NO" id="XhI-CO-Xel">
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Coming 3" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="13" translatesAutoresizingMaskIntoConstraints="NO" id="eaU-H5-NsE">
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Coming 4" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="13" translatesAutoresizingMaskIntoConstraints="NO" id="zfQ-wc-gKS">
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Coming 5" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="13" translatesAutoresizingMaskIntoConstraints="NO" id="gc5-Fu-khI">
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Coming 6" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="13" translatesAutoresizingMaskIntoConstraints="NO" id="2y8-tf-zkv">
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Coming 7" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="13" translatesAutoresizingMaskIntoConstraints="NO" id="CtB-1S-SkJ">
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" red="0.044496245682239532" green="0.61788827180862427" blue="0.91296499967575073" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="7Q4-ZC-21M" firstAttribute="top" secondItem="EPk-cf-GfT" secondAttribute="bottom" constant="22" id="3EM-VP-mEW"/>
+                            <constraint firstItem="gc5-Fu-khI" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="3P1-fh-O5w"/>
+                            <constraint firstItem="eaU-H5-NsE" firstAttribute="top" secondItem="XhI-CO-Xel" secondAttribute="bottom" constant="22" id="9x8-Oz-d7j"/>
+                            <constraint firstItem="gc5-Fu-khI" firstAttribute="top" secondItem="zfQ-wc-gKS" secondAttribute="bottom" constant="22" id="AcM-XM-XgV"/>
+                            <constraint firstItem="UQk-FP-iR1" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="BaT-oC-mei"/>
+                            <constraint firstItem="EDH-h7-Z4W" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="EQb-rh-u88"/>
+                            <constraint firstItem="2y8-tf-zkv" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Gph-q4-nYY"/>
+                            <constraint firstItem="XhI-CO-Xel" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="L4Q-Fe-Sgs"/>
+                            <constraint firstItem="EPk-cf-GfT" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Nfr-HW-bPm"/>
+                            <constraint firstItem="CtB-1S-SkJ" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="V47-24-14b"/>
+                            <constraint firstItem="eaU-H5-NsE" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="XAp-UM-Bpn"/>
+                            <constraint firstItem="2y8-tf-zkv" firstAttribute="top" secondItem="gc5-Fu-khI" secondAttribute="bottom" constant="22" id="Y23-Eg-HaV"/>
+                            <constraint firstItem="7Q4-ZC-21M" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Y6e-4D-sAr"/>
+                            <constraint firstItem="kMr-N4-iAC" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="12" id="aQb-HL-KGm"/>
+                            <constraint firstItem="Gd0-FL-0tH" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="cq5-es-UKN"/>
+                            <constraint firstItem="CtB-1S-SkJ" firstAttribute="top" secondItem="2y8-tf-zkv" secondAttribute="bottom" constant="22" id="ctM-i0-M3B"/>
+                            <constraint firstItem="Gd0-FL-0tH" firstAttribute="top" secondItem="EDH-h7-Z4W" secondAttribute="bottom" constant="11.5" id="dsS-fW-P9m"/>
+                            <constraint firstItem="zfQ-wc-gKS" firstAttribute="top" secondItem="eaU-H5-NsE" secondAttribute="bottom" constant="22" id="fOn-31-RBj"/>
+                            <constraint firstItem="EDH-h7-Z4W" firstAttribute="top" secondItem="kMr-N4-iAC" secondAttribute="bottom" constant="11" id="hC1-L5-vk9"/>
+                            <constraint firstItem="zfQ-wc-gKS" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" constant="1" id="ikq-yu-Swg"/>
+                            <constraint firstItem="UQk-FP-iR1" firstAttribute="top" secondItem="Gd0-FL-0tH" secondAttribute="bottom" constant="8.5" id="teR-Gk-QFc"/>
+                            <constraint firstItem="kMr-N4-iAC" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="xAo-Ek-czc"/>
+                            <constraint firstItem="EPk-cf-GfT" firstAttribute="top" secondItem="UQk-FP-iR1" secondAttribute="bottom" constant="63" id="ykn-GY-TFI"/>
+                            <constraint firstItem="XhI-CO-Xel" firstAttribute="top" secondItem="7Q4-ZC-21M" secondAttribute="bottom" constant="22" id="zmR-nO-ZtR"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="cityLabel" destination="kMr-N4-iAC" id="jos-BM-GaN"/>
+                        <outlet property="comingDay1Label" destination="7Q4-ZC-21M" id="X2O-oJ-pwh"/>
+                        <outlet property="comingDay2Label" destination="XhI-CO-Xel" id="z9F-iA-x1j"/>
+                        <outlet property="comingDay3Label" destination="eaU-H5-NsE" id="0jG-yS-v1U"/>
+                        <outlet property="comingDay4Label" destination="zfQ-wc-gKS" id="pud-fQ-L7u"/>
+                        <outlet property="comingDay5Label" destination="gc5-Fu-khI" id="qas-pA-KL5"/>
+                        <outlet property="comingDay6Label" destination="2y8-tf-zkv" id="vKE-od-0k0"/>
+                        <outlet property="comingDay7Label" destination="CtB-1S-SkJ" id="Wbv-sB-GAa"/>
+                        <outlet property="currentTempLabel" destination="EDH-h7-Z4W" id="RUh-p3-bC4"/>
+                        <outlet property="currentTimeLabel" destination="Gd0-FL-0tH" id="QTW-hq-anc"/>
+                        <outlet property="higheAndLowLabel" destination="UQk-FP-iR1" id="Y8Z-04-Jsf"/>
+                        <outlet property="topConstraint" destination="aQb-HL-KGm" id="2lp-Qe-jPS"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="45.600000000000001" y="107.49625187406298"/>
+        </scene>
+    </scenes>
+</document>
