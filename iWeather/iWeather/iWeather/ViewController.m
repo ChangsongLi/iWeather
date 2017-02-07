@@ -27,40 +27,117 @@
 // future 7 days
 @property (weak, nonatomic) IBOutlet UIScrollView *comingDaysScrollView;
 
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *waitingIndicator;
+
+// arrays for hourly
+@property (strong, nonatomic) NSMutableArray *hourlyHour;
+@property (strong, nonatomic) NSMutableArray *tempHour;
+@property (strong, nonatomic) NSMutableArray *imageHour;
+
+// arrays for dayly
+@property (strong, nonatomic) NSMutableArray *dayOfWeekDay;
+@property (strong, nonatomic) NSMutableArray *tempDay;
+@property (strong, nonatomic) NSMutableArray *imageDay;
+
 @end
 
 @implementation ViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self setUpHourlyLabelArrays];
+    [self setUpDaylyLabelArrays];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewWillAppear:)
+                                                 name:UIApplicationWillEnterForegroundNotification object:nil];
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    // start indicator
+    [self.waitingIndicator startAnimating];
+    
     // set up location managers
     locationManager = [[CLLocationManager alloc]init];
     geocoder = [[CLGeocoder alloc] init];
     
-    
-    [self updateView];
     [self getLocation];
 }
 
--(void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
+- (void) setUpHourlyLabelArrays{
+    // hourly Labels arrays
+    self.hourlyHour = [[NSMutableArray alloc]init];
+    self.tempHour = [[NSMutableArray alloc]init];
+    self.imageHour = [[NSMutableArray alloc]init];
     
-    // get location and then get temperature after get location
-    [self getLocation];
-}
-
-- (void)updateView{
-    
-    CGFloat width = self.view.frame.size.width;
-    
-    switch ((int)width) {
-        case 320:
-            break;
-            
-        default:
-            break;
+    for(int i = 0; i < 24; i++){
+        // hour labels
+        UILabel *hourLabel = [[UILabel alloc] initWithFrame:CGRectMake(10 + 55 * i , 3, 40, 30)];
+        hourLabel.backgroundColor = [UIColor clearColor];
+        hourLabel.textAlignment = NSTextAlignmentCenter;
+        hourLabel.textColor = [UIColor whiteColor];
+        hourLabel.numberOfLines = 0;
+        hourLabel.font = [hourLabel.font fontWithSize:12];
+        [self.hourlyScrollView addSubview:hourLabel];
+        [self.hourlyHour addObject:hourLabel];
+        
+        // temperature labels
+        UILabel *tempLabel = [[UILabel alloc] initWithFrame:CGRectMake(10 + 55 * i , 50, 40, 30)];
+        tempLabel.backgroundColor = [UIColor clearColor];
+        tempLabel.textAlignment = NSTextAlignmentCenter;
+        tempLabel.textColor = [UIColor whiteColor];
+        tempLabel.numberOfLines = 0;
+        tempLabel.font = [tempLabel.font fontWithSize:12];
+        [self.hourlyScrollView addSubview:tempLabel];
+        [self.tempHour addObject:tempLabel];
+        
+        // icon images
+        UIImageView *icon =[[UIImageView alloc] initWithFrame:CGRectMake(17 + 55 * i, 30, 25, 25)];
+        [self.hourlyScrollView addSubview:icon];
+        [self.imageHour addObject:icon];
     }
 }
+
+- (void) setUpDaylyLabelArrays{
+    // dayly labels arrays
+    self.dayOfWeekDay = [[NSMutableArray alloc]init];
+    self.tempDay = [[NSMutableArray alloc]init];
+    self.imageDay = [[NSMutableArray alloc]init];
+    for(int i = 0; i < 7; i++){
+        // create day of week label
+        UILabel *dayLabel = [[UILabel alloc] initWithFrame:CGRectMake(13, 5 + 32 * i, 100, 30)];
+        dayLabel.backgroundColor = [UIColor clearColor];
+        dayLabel.textAlignment = NSTextAlignmentCenter;
+        dayLabel.textColor = [UIColor whiteColor];
+        dayLabel.numberOfLines = 0;
+        dayLabel.textAlignment = NSTextAlignmentLeft;
+        dayLabel.font = [dayLabel.font fontWithSize:16];
+        [self.comingDaysScrollView addSubview:dayLabel];
+        [self.dayOfWeekDay addObject:dayLabel];
+        
+        // create temperature range labels
+        UILabel *tempLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 113, 5 + 32 * i, 100, 30)];
+        tempLabel.backgroundColor = [UIColor clearColor];
+        tempLabel.textAlignment = NSTextAlignmentCenter;
+        tempLabel.textColor = [UIColor whiteColor];
+        tempLabel.numberOfLines = 0;
+        tempLabel.textAlignment = NSTextAlignmentRight;
+        tempLabel.font = [tempLabel.font fontWithSize:16];
+        [self.comingDaysScrollView addSubview:tempLabel];
+        [self.tempDay addObject:tempLabel];
+        
+        //create icon
+        UIImageView *icon =[[UIImageView alloc] initWithFrame:CGRectMake( self.view.frame.size.width / 2 - 13, 8 + 32 * i, 26, 26)];
+        [self.comingDaysScrollView addSubview:icon];
+        [self.imageDay addObject:icon];
+    }
+}
+
+- (IBAction)powerByDarkSkyAction:(UIButton *)sender {
+    UIApplication *application = [UIApplication sharedApplication];
+    NSURL *url = [NSURL URLWithString:@"https://darksky.net/poweredby/"];
+    [application openURL:url options:@{} completionHandler:nil];
+}
+
 #pragma mark - Temperature
 
 - (void)getTemperature{
@@ -77,10 +154,13 @@
                                             dispatch_async(dispatch_get_main_queue(), ^{
                                                 [self updateCurrentLabelsWithDatas:jsonData];
                                                 [self createHourlyLabelsWithDatas:jsonData];
-                                                [self updateComming7DaysLabelsWithDatas:jsonData];                                      });
+                                                [self updateComming7DaysLabelsWithDatas:jsonData];
+                                                // stop active indicator
+                                                [self.waitingIndicator stopAnimating];});
                                         }
                                   }];
     [task resume];
+
 }
 
 static inline NSString *stringFromWeekday(int weekday){
@@ -155,30 +235,17 @@ static inline NSString *stringFromWeekday(int weekday){
         NSString *temp = [NSString stringWithFormat:@"%.0f", [[hourDetail valueForKey:@"temperature"] doubleValue]];
         
         //create hour labels
-        UILabel *hourLabel = [[UILabel alloc] initWithFrame:CGRectMake(10 + 55 * i , 3, 40, 30)];
-        hourLabel.backgroundColor = [UIColor clearColor];
-        hourLabel.textAlignment = NSTextAlignmentCenter;
-        hourLabel.textColor = [UIColor whiteColor];
-        hourLabel.numberOfLines = 0;
+        UILabel *hourLabel = [self.hourlyHour objectAtIndex:i];
         hourLabel.text = hour;
-        hourLabel.font = [hourLabel.font fontWithSize:12];
-        [self.hourlyScrollView addSubview:hourLabel];
         
         //create temperature labels
-        UILabel *tempLabel = [[UILabel alloc] initWithFrame:CGRectMake(10 + 55 * i , 50, 40, 30)];
-        tempLabel.backgroundColor = [UIColor clearColor];
-        tempLabel.textAlignment = NSTextAlignmentCenter;
-        tempLabel.textColor = [UIColor whiteColor];
-        tempLabel.numberOfLines = 0;
+        UILabel *tempLabel = [self.tempHour objectAtIndex:i];
         tempLabel.text = [temp stringByAppendingString:@"°"];
-        tempLabel.font = [tempLabel.font fontWithSize:12];
-        [self.hourlyScrollView addSubview:tempLabel];
         
         //create icon
         NSString *iconString = [hourDetail valueForKey:@"icon"];
-        UIImageView *icon =[[UIImageView alloc] initWithFrame:CGRectMake(17 + 55 * i, 30, 25, 25)];
+        UIImageView *icon = [self.imageHour objectAtIndex:i];
         icon.image = [UIImage imageNamed:[self getIconImageNameByIcon:iconString]];
-        [self.hourlyScrollView addSubview:icon];
     }
     // set content size and border
     int contentWidth = 5 + 24 * 55;
@@ -213,26 +280,12 @@ static inline NSString *stringFromWeekday(int weekday){
         NSString *lowestTemp = [comingDay valueForKey:@"temperatureMin"];
         
         // create day of week labels
-        UILabel *dayLabel = [[UILabel alloc] initWithFrame:CGRectMake(13, 5 + 32 * i, 100, 30)];
-        dayLabel.backgroundColor = [UIColor clearColor];
-        dayLabel.textAlignment = NSTextAlignmentCenter;
-        dayLabel.textColor = [UIColor whiteColor];
-        dayLabel.numberOfLines = 0;
+        UILabel *dayLabel = [self.dayOfWeekDay objectAtIndex:i];
         dayLabel.text = dayOfWeek;
-        dayLabel.textAlignment = NSTextAlignmentLeft;
-        dayLabel.font = [dayLabel.font fontWithSize:16];
-        [self.comingDaysScrollView addSubview:dayLabel];
         
         // create temperature range labels
-        UILabel *tempLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 113, 5 + 32 * i, 100, 30)];
-        tempLabel.backgroundColor = [UIColor clearColor];
-        tempLabel.textAlignment = NSTextAlignmentCenter;
-        tempLabel.textColor = [UIColor whiteColor];
-        tempLabel.numberOfLines = 0;
+        UILabel *tempLabel = [self.tempDay objectAtIndex:i];
         tempLabel.text = [NSString stringWithFormat:@"%3.0f  %3.0f", [lowestTemp doubleValue], [highestTemp doubleValue] ];
-        tempLabel.textAlignment = NSTextAlignmentRight;
-        tempLabel.font = [tempLabel.font fontWithSize:16];
-        [self.comingDaysScrollView addSubview:tempLabel];
         
         // set content size and border
         int contentWidth = 5 + 32 * 7;
@@ -240,9 +293,8 @@ static inline NSString *stringFromWeekday(int weekday){
         
         //create icon
         NSString *iconString = [comingDay valueForKey:@"icon"];
-        UIImageView *icon =[[UIImageView alloc] initWithFrame:CGRectMake( self.view.frame.size.width / 2 - 13, 8 + 32 * i, 26, 26)];
+        UIImageView *icon = [self.imageDay objectAtIndex:i];
         icon.image = [UIImage imageNamed:[self getIconImageNameByIcon:iconString]];
-        [self.comingDaysScrollView addSubview:icon];
     }
 }
 
@@ -324,6 +376,10 @@ static inline NSString *stringFromWeekday(int weekday){
     
     [myAlertController addAction: ok];
     [self presentViewController:myAlertController animated:YES completion:nil];
+}
+
+-(void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 @end
