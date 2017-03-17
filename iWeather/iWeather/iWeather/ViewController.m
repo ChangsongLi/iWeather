@@ -8,7 +8,7 @@
 
 #import "ViewController.h"
 
-@interface ViewController ()
+@interface ViewController()
 
 // location
 @property (strong, nonatomic) NSString *longitude;
@@ -20,6 +20,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *currentTimeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *currentTempLabel;
 @property (weak, nonatomic) IBOutlet UILabel *higheAndLowLabel;
+@property (weak, nonatomic) IBOutlet UILabel *todayLabel;
 
 // hour
 @property (weak, nonatomic) IBOutlet UIScrollView *hourlyScrollView;
@@ -39,20 +40,36 @@
 @property (strong, nonatomic) NSMutableArray *tempDay;
 @property (strong, nonatomic) NSMutableArray *imageDay;
 
+@property (nonatomic) int unit;
+@property (strong, nonatomic) NSString *city;
+@property (strong, nonatomic) NSString *timeNow;
+@property (strong, nonatomic) NSString *tomorrowSummary;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *unitSettingSeg;
+
 @end
 
 @implementation ViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    // choose temperature unit
+    NSString *unit = [[NSUserDefaults standardUserDefaults] objectForKey:@"unit"];
+    if(unit){
+        [self.unitSettingSeg setSelectedSegmentIndex:[unit integerValue]];
+    }
+    
     [self setUpHourlyLabelArrays];
     [self setUpDaylyLabelArrays];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewWillAppear:)
                                                  name:UIApplicationWillEnterForegroundNotification object:nil];
+    
 }
 
 -(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    
     // start indicator
     [self.waitingIndicator startAnimating];
     
@@ -60,7 +77,58 @@
     locationManager = [[CLLocationManager alloc]init];
     geocoder = [[CLGeocoder alloc] init];
     
+    NSString *unit = [[NSUserDefaults standardUserDefaults] objectForKey:@"unit"];
+    if(unit){
+        if([unit isEqualToString:@"0"]){
+            self.unit = 0;
+        }else{
+            self.unit = 1;
+        }
+    }else{
+        self.unit = 0;
+    }
+    
     [self getLocation];
+}
+
+- (IBAction)changeUnitAction:(UISegmentedControl *)sender {
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString *unit = [NSString stringWithFormat:@"%ld", (long)[self.unitSettingSeg selectedSegmentIndex]];
+    [userDefaults setObject:unit forKey:@"unit"];
+    [userDefaults synchronize];
+    [self viewWillAppear:YES];
+}
+
+#pragma mark - Notification
+
+-(void)sendNotification:(NSString *)title withBody:(NSString *)body withTime:(long)time{
+    
+    // setting up notification
+    UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+    UNMutableNotificationContent *content = [UNMutableNotificationContent new];
+    content.title = title;
+    content.body = body;
+    content.sound = [UNNotificationSound defaultSound];
+    
+    UNTimeIntervalNotificationTrigger *trigger = [UNTimeIntervalNotificationTrigger triggerWithTimeInterval:time repeats:NO];
+    
+    NSString *identifier = @"UYLLocalNotification";
+    UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:identifier
+                                                                          content:content
+                                                                          trigger:trigger];
+    [center removeAllPendingNotificationRequests];
+    // trigger notification
+    [center addNotificationRequest:request withCompletionHandler:^(NSError * _Nullable error) {
+        if (error != nil) {
+            NSLog(@"Something went wrong: %@",error);
+        }
+    }];
+}
+
+- (NSString *)tempConvertFromFToC:(NSString *)fTemp{
+    long temp = [fTemp integerValue];
+    temp = (temp - 32) * 5 / 9;
+    return [NSString stringWithFormat:@"%ld", temp];
 }
 
 - (void) setUpHourlyLabelArrays{
@@ -182,11 +250,18 @@ static inline NSString *stringFromWeekday(int weekday){
     
     // current temperature
     NSString *temp = [currently valueForKey:@"temperature"];
-    self.currentTempLabel.text = [NSString stringWithFormat:@"%.0f", [temp doubleValue]];
+    temp = [NSString stringWithFormat:@"%.0f", [temp doubleValue]];
+    if(self.unit == 0){
+        temp = [self tempConvertFromFToC:temp];
+    }
+    self.currentTempLabel.text = temp;
     [self.currentTempLabel setOpaque:NO];
     
+    // current time
+    self.timeNow = [currently valueForKey:@"time"];
+    
     // current weather detail
-    NSString *weatherDetail = [[[currently valueForKey:@"icon"] stringByReplacingOccurrencesOfString:@"-" withString:@" "] capitalizedString];
+    NSString *weatherDetail = [currently valueForKey:@"summary"];
     weatherDetail = [weatherDetail stringByReplacingOccurrencesOfString:@" Day" withString:@""];
     weatherDetail = [weatherDetail stringByReplacingOccurrencesOfString:@" Night" withString:@""];
     
@@ -198,7 +273,7 @@ static inline NSString *stringFromWeekday(int weekday){
     
     NSDateComponents *components = [[NSCalendar currentCalendar] components:NSCalendarUnitWeekday fromDate:date];
     NSString *dayOfWeek = stringFromWeekday((int)[components weekday]);
-    
+    self.todayLabel.text = @"Today";
     self.currentTimeLabel.text = dayOfWeek;
     
     // highest and lowest temperature
@@ -206,11 +281,18 @@ static inline NSString *stringFromWeekday(int weekday){
     NSString *highestTemp = [today valueForKey:@"temperatureMax"];
     NSString *lowestTemp = [today valueForKey:@"temperatureMin"];
     
+    if(self.unit == 0){
+        highestTemp = [self tempConvertFromFToC:highestTemp];
+        lowestTemp = [self tempConvertFromFToC:lowestTemp];
+    }
+    
     self.higheAndLowLabel.text = [NSString stringWithFormat:@"%.0f°     %.0f°", [lowestTemp doubleValue], [highestTemp doubleValue]];
     
 }
 
 - (void)createHourlyLabelsWithDatas:(NSData *) data{
+    NSString *notificationTime = @"0";
+    
     for(int i = 0; i < 24; i++){
         // hour detail
         NSData *hourDetail = [[[data valueForKey:@"hourly"] valueForKey:@"data"] objectAtIndex:i];
@@ -232,7 +314,15 @@ static inline NSString *stringFromWeekday(int weekday){
         }else{
             hour = [NSString stringWithFormat:@"%ldAM", hourNum];
         }
+        
+        if(i == 0)
+            hour = @"Now";
+        
         NSString *temp = [NSString stringWithFormat:@"%.0f", [[hourDetail valueForKey:@"temperature"] doubleValue]];
+        
+        if(self.unit == 0){
+            temp = [self tempConvertFromFToC:temp];
+        }
         
         //create hour labels
         UILabel *hourLabel = [self.hourlyHour objectAtIndex:i];
@@ -245,8 +335,21 @@ static inline NSString *stringFromWeekday(int weekday){
         //create icon
         NSString *iconString = [hourDetail valueForKey:@"icon"];
         UIImageView *icon = [self.imageHour objectAtIndex:i];
-        icon.image = [UIImage imageNamed:[self getIconImageNameByIcon:iconString]];
+        NSString *imageName = [self getIconImageNameByIcon:iconString];
+        icon.image = [UIImage imageNamed:imageName];
+        
+        if([hour isEqualToString:@"8PM"])
+            notificationTime = time;
+        
     }
+
+    // if now is notification time, don't set notification schedule. Otherwise, set notification.
+    if([notificationTime doubleValue] != 0){
+        double notificationTimeFromNow = [notificationTime doubleValue] - [self.timeNow doubleValue];
+        NSLog(@"%f", notificationTimeFromNow);
+        [self sendNotification:@"Tomorrow's weather" withBody:self.tomorrowSummary withTime:notificationTimeFromNow];
+    }
+    
     // set content size and border
     int contentWidth = 5 + 24 * 55;
     self.hourlyScrollView.contentSize = CGSizeMake(contentWidth, 80);
@@ -269,6 +372,12 @@ static inline NSString *stringFromWeekday(int weekday){
         NSString *time = [comingDay valueForKey:@"time"];
         NSDate *date = [NSDate dateWithTimeIntervalSince1970:[time doubleValue]];
         
+        // get tomorrow summary
+        if(i == 0){
+            self.tomorrowSummary = [comingDay valueForKey:@"summary"];
+            NSLog(@"%@",self.tomorrowSummary);
+        }
+        
         // get day of week
         NSDateComponents *components = [[NSCalendar currentCalendar] components:NSCalendarUnitWeekday fromDate:date];
         NSString *dayOfWeek = stringFromWeekday((int)[components weekday]);
@@ -278,6 +387,11 @@ static inline NSString *stringFromWeekday(int weekday){
         // get lowest and highest temperature
         NSString *highestTemp = [comingDay valueForKey:@"temperatureMax"];
         NSString *lowestTemp = [comingDay valueForKey:@"temperatureMin"];
+        
+        if(self.unit == 0){
+            highestTemp = [self tempConvertFromFToC:highestTemp];
+            lowestTemp = [self tempConvertFromFToC:lowestTemp];
+        }
         
         // create day of week labels
         UILabel *dayLabel = [self.dayOfWeekDay objectAtIndex:i];
@@ -352,6 +466,7 @@ static inline NSString *stringFromWeekday(int weekday){
         if(error == nil && [placemarks count] > 0) {
             placemark = [placemarks lastObject];
             self.cityLabel.text = placemark.locality;
+            self.city = placemark.locality;
         }else {
             NSLog(@"%@", error.debugDescription);
         }
@@ -380,6 +495,10 @@ static inline NSString *stringFromWeekday(int weekday){
 
 -(void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    segue.destinationViewController.view.backgroundColor = self.view.backgroundColor;
 }
 
 @end

@@ -53,6 +53,8 @@
 		432494BA1DCC3290009EF4B6 /* iWeatherUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = iWeatherUITests.m; sourceTree = "<group>"; };
 		432494BC1DCC3290009EF4B6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		432494C91DCC4106009EF4B6 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		437E71B21E7A47F100743E4F /* iWeather.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = iWeather.entitlements; sourceTree = "<group>"; };
+		437E71B31E7A49E400743E4F /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +107,7 @@
 		432494941DCC328F009EF4B6 /* iWeather */ = {
 			isa = PBXGroup;
 			children = (
+				437E71B21E7A47F100743E4F /* iWeather.entitlements */,
 				432494981DCC328F009EF4B6 /* AppDelegate.h */,
 				432494991DCC328F009EF4B6 /* AppDelegate.m */,
 				4324949B1DCC328F009EF4B6 /* ViewController.h */,
@@ -147,6 +150,7 @@
 		432494C81DCC4106009EF4B6 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				437E71B31E7A49E400743E4F /* UserNotifications.framework */,
 				432494C91DCC4106009EF4B6 /* CoreLocation.framework */,
 			);
 			name = Frameworks;
@@ -221,6 +225,11 @@
 						CreatedOnToolsVersion = 8.0;
 						DevelopmentTeam = XL259SR7ZJ;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 					432494AA1DCC3290009EF4B6 = {
 						CreatedOnToolsVersion = 8.0;
@@ -386,7 +395,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -428,7 +437,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -439,6 +448,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = iWeather/iWeather.entitlements;
 				DEVELOPMENT_TEAM = XL259SR7ZJ;
 				INFOPLIST_FILE = iWeather/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -451,6 +461,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = iWeather/iWeather.entitlements;
 				DEVELOPMENT_TEAM = XL259SR7ZJ;
 				INFOPLIST_FILE = iWeather/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
